@@ -3,11 +3,11 @@ import { FiMail, FiUser, FiMessageCircle } from "react-icons/fi";
 
 function Contact() {
   return (
-    <section id="contact" className="relative isolate py-32">
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <section id="contact" className="relative isolate py-20">
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
 
         {/* Left Content */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="inline-block px-5 py-2 rounded-full bg-white/30 backdrop-blur-md border border-white/30 text-sm">
             Get In Touch
           </div>
@@ -21,7 +21,7 @@ function Contact() {
         {/* Right Form */}
         <div className="relative">
           <div className="absolute -inset-8 bg-[#d9a7c7]/20 blur-3xl rounded-full"></div>
-          <div className="relative bg-white/30 backdrop-blur-xl border border-white/30 rounded-3xl p-10 shadow-md space-y-6">
+          <div className="relative bg-white/30 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-md space-y-5">
 
             {/* Name */}
             <div className="space-y-2">

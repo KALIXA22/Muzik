@@ -4,16 +4,16 @@ import { FiMusic, FiHeadphones, FiHeart } from 'react-icons/fi';
 
 function About() {
   return (
-    <section id="about" className="relative isolate py-20">
+    <section id="about" className="relative isolate py-16">
       <div className="max-w-6xl mx-auto px-6 space-y-12">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           <div className="relative">
             <div className="absolute -inset-4 bg-[#3b2f63]/20 blur-2xl rounded-full"></div>
             <div className="relative bg-white/30 backdrop-blur-xl border border-white/30 rounded-3xl overflow-hidden shadow-xl p-4">
               <img src={music} alt="About Music" className="w-full h-56 object-cover rounded-2xl" />
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="inline-block px-4 py-1.5 rounded-full bg-white/30 backdrop-blur-md border border-white/30 text-xs">
               About Us
             </div>
@@ -27,7 +27,7 @@ function About() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-5">
           {[{ icon: <FiMusic size={22} />, title: 'Discover' }, { icon: <FiHeadphones size={22} />, title: 'Listen' }, { icon: <FiHeart size={22} />, title: 'Love' }].map((item,index)=>(
             <div key={index} className="bg-white/30 backdrop-blur-xl border border-white/30 rounded-2xl p-6 shadow-md hover:shadow-lg transition">
               <div className="text-[#3b2f63]">{item.icon}</div>

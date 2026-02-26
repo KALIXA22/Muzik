@@ -1,76 +1,66 @@
-import React from 'react'
+import {useState} from 'react';
+import { Link ,useNavigate} from 'react-router-dom';
+import {FaGoogle, FaFacebookF} from 'react-icons/fa';
+import Alert from './Alert';
+import Logo from '../assets/music.avif';
 
 function Login() {
+  const [formData,setFormData] = useState({email:'',password:''});  
+  const [alert,setAlert] = useState(null);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({...formData,[e.target.name]:e.target.value});
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(!formData.email || !formData.password){
+      setAlert({type:'warning',message:'Please fill in all fields'});
+      return;
+    }
+    if(formData.email ==='user@example.com' && formData.password === 'password123'){
+      setAlert({type:'success',message:'Login successful! Redirecting...'});
+
+      setTimeout(() => {
+        setAlert(null);
+        navigate('/');
+      }, 800);
+    } else {
+      setAlert({type:'error',message:'Invalid email or password'});
+      setTimeout(() => setAlert(null), 2500);
+    }
+  };
+  
   return (
-    <section className='relative h-screen flex items-center justify-center bg-gradient-to-r from-[#d9a7c7] via-[#fffcdc] to-[#1e1e3f]'>
-      <div className='relative z-10 bg-white/40 backdrop-blur-md p-10 w-[350px] rounded-3xl shadow-2xl border border-white/30'>
-
-        <h2 className='text-2xl font-bold mb-2 text-[#3b2f63] '>
-          Welcome to Music 🎧
-        </h2>
-
-        <p className="text-sm text-gray-700 mb-6">
-          It's a pleasure seeing you here!
-        </p>
-
-        <form className='space-y-6'>
-
-          <div>
-            <label className='block text-sm font-medium mb-1 text-gray-800'>
-              Username
-            </label>
-            <input 
-              type="text" 
-              placeholder='Username'
-              className='w-full bg-transparent border-b border-gray-500 p-2 outline-none focus:border-[#3b2f63] transition'
-              required
-            />
-          </div>
-
-          <div>
-            <label className='block text-sm font-medium mb-1 text-gray-800'>
-              Email
-            </label>
-            <input 
-              type="email" 
-              placeholder='Email'
-              className='w-full bg-transparent border-b border-gray-500 p-2 outline-none focus:border-[#3b2f63] transition'
-              required
-            />
-          </div>
-
-          <div>
-            <label className='block text-sm font-medium mb-1 text-gray-800'>
-              Password
-            </label>
-            <input 
-              type="password" 
-              placeholder='Password'
-              className='w-full bg-transparent border-b border-gray-500 p-2 outline-none focus:border-[#3b2f63] transition'
-              required
-            />
-          </div>
-
-          <button 
-            type='submit' 
-            className='w-full py-3 rounded-full bg-[#1e1e3f] text-white font-semibold hover:bg-[#2e2e5e] transition duration-300 shadow-lg'
-          >
-            Login
-          </button>
-
-        </form>
-
-        <p className="mt-6 text-sm text-gray-700">
-          Don't have an account?{" "}
-          <a href="#" className="font-semibold text-[#3b2f63] hover:underline">
-            Sign Up
-          </a>
-        </p>
-
+    <section className='relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#fdfbfb] via-[#f3e7f3] px-6'>
+      <div className="relative z-10 bg-white/20 backdrop-blur-xl p-10 w-full max-w-md rounded-3xl border border-white/30 shadow-2xl">
+        <img src={Logo} alt="Logo" className="w-12 h-12 rounded-lg" />
+        <h2 className="text-2xl">Welcome to Music🎧</h2>
       </div>
+      {alert && <Alert type={alert.type} message={alert.message} />}
+      <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="space-y-2">
+          <label className="text-sm">Email</label>
+          <input 
+          type="email" 
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm">Password</label>
+          <input 
+          type="password" 
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </form>
 
     </section>
-  )
-}
 
-export default Login
+
+
+}
