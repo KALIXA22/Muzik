@@ -1,11 +1,8 @@
 import React from 'react'
 
-import PremiumMusicBackground from './MusicBackground'
-
 function Login() {
   return (
     <section className='relative h-screen flex items-center justify-center bg-gradient-to-r from-[#d9a7c7] via-[#fffcdc] to-[#1e1e3f]'>
-         <PremiumMusicBackground/>
       <div className='relative z-10 bg-white/40 backdrop-blur-md p-10 w-[350px] rounded-3xl shadow-2xl border border-white/30'>
 
         <h2 className='text-2xl font-bold mb-2 text-[#3b2f63] '>
