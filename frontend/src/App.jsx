@@ -6,25 +6,22 @@ import Library from './components/Library';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import Register from './components/Register';
 
 function App() {
   return (
       <div className="relative min-h-screen overflow-x-hidden
       bg-gradient-to-br from-[#fdfbfb] via-[#f3e7f3] to-[#e3d4f3]">
       
+        <Navbar />
 
-      <Login/>
-
-      {/* <Navbar /> 
-
-      <main className="pt-16">
+       <main className="pt-16"> 
         <section id="home"><Hero /></section>
         <section id="about"><About /></section>
         <section id="library"><Library /></section>
         <section id="contact"><Contact /></section>
       </main>
-
-      <Footer />*/}
+       <Footer /> 
     </div>
   )
 }

@@ -14,7 +14,7 @@ function Navbar() {
         text-[#3b2f63]">
 
         <Link to="/" className="text-xl font-bold tracking-wide">
-          Music 🎧
+          Music🎧
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -33,7 +33,7 @@ function Navbar() {
           <Link to="/login" className="px-4 py-2 rounded-3xl border border-white/40 hover:bg-white/30 transition">
             Log In
           </Link>
-          <Link to="/signup" className="px-5 py-2 rounded-3xl bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white shadow-[0_0_20px_rgba(217,167,199,0.4)] hover:shadow-[0_0_30px_rgba(217,167,199,0.7)] transition">
+          <Link to="/register" className="px-5 py-2 rounded-3xl bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white shadow-[0_0_20px_rgba(217,167,199,0.4)] hover:shadow-[0_0_30px_rgba(217,167,199,0.7)] transition">
             Sign Up
           </Link>
         </div>
@@ -50,7 +50,7 @@ function Navbar() {
           ))}
           <div className="pt-4 border-t border-white/30 space-y-3">
             <Link to="/login" className="block text-center rounded-3xl py-2 border border-white/40">Log In</Link>
-            <Link to="/signup" className="block text-center rounded-3xl py-2 bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white">Sign Up</Link>
+            <Link to="/register" className="block text-center rounded-3xl py-2 bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white">Sign Up</Link>
           </div>
         </div>
       )}
