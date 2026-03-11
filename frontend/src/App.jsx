@@ -1,29 +1,19 @@
-import React from 'react'
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Library from './components/Library';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import Login from './components/Login';
-import Register from './components/Register';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from './pages/Home'
+import Register from './components/Register'
+import Login from './components/Login'
 
 function App() {
   return (
-      <div className="relative min-h-screen overflow-x-hidden
-      bg-gradient-to-br from-[#fdfbfb] via-[#f3e7f3] to-[#e3d4f3]">
-      
-        <Navbar />
-
-       <main className="pt-16"> 
-        <section id="home"><Hero /></section>
-        <section id="about"><About /></section>
-        <section id="library"><Library /></section>
-        <section id="contact"><Contact /></section>
-      </main>
-       <Footer /> 
-    </div>
-  )
+    
+      <Routes>
+        <Route path="/" element={<Home/>} />
+         <Route path="/register" element={<Register/>} />
+         <Route path="/login" element={<Login/>} />
+         {/* <Route path="/dashboard" element={<MusicDashboard/>} /> */}
+      </Routes>
+  
+  );
 }
 
 export default App;
