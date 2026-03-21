@@ -157,7 +157,7 @@ function Login() {
               hover:shadow-[0_0_40px_rgba(217,167,199,0.9)]
               transition"
             >
-              Sign in
+               <Link to="/dashboard" className="font-semibold hover:underline">Sign in</Link>
             </button>
 
           </form>
