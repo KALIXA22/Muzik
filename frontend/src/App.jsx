@@ -4,6 +4,7 @@ import Register from './components/Register'
 import Login from './components/Login'
 import MusicDashboard from "./pages/MusicDashboard";
 
+
 function App() {
   return (
     
@@ -13,7 +14,7 @@ function App() {
          <Route path="/login" element={<Login/>} />
          <Route path="/dashboard" element={<MusicDashboard/>} /> 
       </Routes>
-  
+     
   );
 }
 
