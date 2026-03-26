@@ -15,26 +15,20 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+     if (
+  formData.email === "user@example.com" &&
+  formData.password === "password123"
+) {
+  setAlert({ type: "success", message: "Login successful..." });
 
-    if (!formData.email || !formData.password) {
-      setAlert({ type: "warning", message: "Please fill in all fields" });
-      return;
-    }
-
-    if (
-      formData.email === "user@example.com" &&
-      formData.password === "password123"
-    ) {
-      setAlert({ type: "success", message: "Sign up succesful..." });
-
-      setTimeout(() => {
-        setAlert(null);
-        navigate("/");
-      }, 800);
-    } else {
-      setAlert({ type: "error", message: "Invalid email or password" });
-      setTimeout(() => setAlert(null), 2500);
-    }
+  setTimeout(() => {
+    setAlert(null);
+    navigate("/dashboard"); // <-- Redirect to dashboard here
+  }, 800);
+} else {
+  setAlert({ type: "error", message: "Invalid email or password" });
+  setTimeout(() => setAlert(null), 2500);
+}
   };
 
   return (
@@ -147,19 +141,17 @@ function Login() {
                 Password
               </label>
             </div>
-
-            <button
-              type="submit"
-              className="w-full py-3 rounded-3xl
-              bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63]
-              text-white font-semibold
-              shadow-[0_0_20px_rgba(217,167,199,0.6)]
-              hover:shadow-[0_0_40px_rgba(217,167,199,0.9)]
-              transition"
-            >
-               <Link to="/dashboard" className="font-semibold hover:underline">Sign in</Link>
-            </button>
-
+                  <button
+                    type="submit"
+                    className="w-full py-3 rounded-3xl
+                      bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63]
+                      text-white font-semibold
+                      shadow-[0_0_20px_rgba(217,167,199,0.6)]
+                      hover:shadow-[0_0_40px_rgba(217,167,199,0.9)]
+                      transition"
+                  >
+                    Sign in
+                  </button>
           </form>
 
           <p className="mt-6 text-center text-[#3b2f63]/80">
