@@ -41,8 +41,8 @@ function Register() {
 
   setTimeout(() => {
     setAlert(null);
-    navigate("/");
-  }, 800);
+    navigate("/login");
+  }, 8000);
 };
   return (
     <>
