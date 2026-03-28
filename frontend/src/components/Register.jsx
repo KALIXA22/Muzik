@@ -4,7 +4,6 @@ import { FiMusic } from "react-icons/fi";
 import Logo from "../assets/music.avif";
 
 
-
 function Register() {
   const [formData, setFormData] = useState({
     name:"",
