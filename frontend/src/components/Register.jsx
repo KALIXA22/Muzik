@@ -40,7 +40,7 @@ function Register() {
 
   setTimeout(() => {
     setAlert(null);
-    navigate("/login");
+    navigate("/dashboard");
   }, 8000);
 };
   return (
