@@ -2,8 +2,8 @@ import { FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="relative mt-24 overflow-hidden">
-      <div className="relative max-w-6xl mx-auto px-6 py-20 text-center space-y-12">
+    <footer className="relative mt-16 overflow-hidden">
+      <div className="relative max-w-6xl mx-auto px-6 py-16 text-center space-y-12">
 
         {/* Title */}
         <div className="space-y-3">

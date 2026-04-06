@@ -4,13 +4,13 @@ import music from '../assets/music.avif';
 
 function Hero() {
   return (
-    <section id="home" className="relative isolate pt-40 pb-24 min-h-screen flex items-center">
-      <div className="max-w-7xl mx-auto px-6 grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
+    <section id="home" className="relative isolate pt-20 pb-16 min-h-screen flex items-center">
+      <div className="max-w-7xl mx-auto px-6 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
         <div className="space-y-8">
           <div className="inline-block px-5 py-2 rounded-full bg-white/30 backdrop-blur-md border border-white/30 text-sm">
             Immersive Sound Experience
           </div>
-          <div className="space-y-6">
+          <div className="space-y-4">
             <h1 className="text-5xl font-bold text-[#3b2f63]">
               Feel every Beat.<br/> Live Every Moment.
             </h1>

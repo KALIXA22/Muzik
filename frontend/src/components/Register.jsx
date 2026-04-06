@@ -64,18 +64,19 @@ function Register() {
               className="w-14 h-14 rounded-xl shadow-md"
             />
           </div>
-          <h2 className="text-2xl font-bold text-[#3b2f63] text-center mb-8 flex items-center justify-center gap-2">
+          <h2 className="text-2xl font-bold text-[#3b2f63] text-center mb-10 flex items-center justify-center gap-2">
             Secure the vibe
             <FiMusic className="animate-pulse" />  
           </h2>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="relative">
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                placeholder=" "
                 className="peer w-full px-4 py-3 rounded-xl
                 bg-white/40 backdrop-blur-md
                 border border-white/40
@@ -87,10 +88,10 @@ function Register() {
               <label
                 className="absolute left-4 top-3 text-sm text-[#3b2f63]/70
                 transition-all
-                peer-placeholder-shown:top-5
+                peer-placeholder-shown:top-4
                 peer-focus:-top-2
                 peer-focus:text-xs
-                
+                peer-focus:text-[#3b2f63]
                 bg-white/60 px-1 rounded"
               >
                 Name
@@ -101,7 +102,7 @@ function Register() {
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
+                placeholder=" "
                 className="peer w-full px-4 py-3 rounded-xl
                 bg-white/40 backdrop-blur-md
                 border border-white/40
@@ -113,6 +114,7 @@ function Register() {
               <label
                 className="absolute left-4 top-3 text-sm text-[#3b2f63]/70
                 transition-all
+                peer-placeholder-shown:top-4
                 peer-placeholder-shown:top-3
                 peer-focus:-top-2
                 peer-focus:text-xs
@@ -128,7 +130,7 @@ function Register() {
                 type="password"
                 name="password"
                 value={formData.password}
-                onChange={handleChange}
+                placeholder=" "
                 className="peer w-full px-4 py-3 rounded-xl
                 bg-white/40 backdrop-blur-md
                 border border-white/40
@@ -140,6 +142,7 @@ function Register() {
               <label
                 className="absolute left-4 top-3 text-sm text-[#3b2f63]/70
                 transition-all
+                peer-placeholder-shown:top-4
                 peer-placeholder-shown:top-3
                 peer-focus:-top-2
                 peer-focus:text-xs

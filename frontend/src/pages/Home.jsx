@@ -14,7 +14,7 @@ function Home() {
         
          <Navbar />
 
-       <main className="pt-16"> 
+       <main className="pt-20"> 
         <section id="home"><Hero /></section>
         <section id="about"><About /></section>
         <section id="library"><Library /></section>

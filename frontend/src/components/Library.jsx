@@ -13,11 +13,11 @@ const SONGS = [
 
 function Library() {
   return (
-    <section id="library" className="relative isolate py-32">
-      <div className="max-w-7xl mx-auto px-6 space-y-16">
+    <section id="library" className="relative isolate py-24">
+      <div className="max-w-7xl mx-auto px-6 space-y-14">
 
         {/* Header */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-6">
           <div className="inline-block px-5 py-2 rounded-full bg-white/30 backdrop-blur-md border border-white/30 text-sm">
             Music Library
           </div>
@@ -41,7 +41,7 @@ function Library() {
         </div>
 
         {/* Songs Grid */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-10">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
           {SONGS.map((song, index) => (
             <div key={index} className="group relative bg-white/30 backdrop-blur-xl border border-white/30 rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition">
               
