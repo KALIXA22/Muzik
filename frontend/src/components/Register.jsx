@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMusic } from "react-icons/fi";
 import Logo from "../assets/music.avif";
+import { useAuth } from "../context/AuthContext";
 
 
 function Register() {
@@ -14,6 +15,7 @@ function Register() {
 
   const [alert, setAlert] = useState(null);
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleChange = (e) => {
      const{name,value}=e.target;
@@ -36,15 +38,40 @@ function Register() {
     return;
   }
 
-  setAlert({ type: "success", message: "Account created successfully!" });
+  // Register user
+  try {
+    register({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password
+    });
 
-  setTimeout(() => {
-    setAlert(null);
-    navigate("/dashboard");
-  }, 8000);
+    setAlert({ type: "success", message: "Account created successfully! Redirecting to login..." });
+
+    setTimeout(() => {
+      setAlert(null);
+      navigate("/login");
+    }, 2000);
+  } catch (error) {
+    setAlert({ type: "error", message: "Registration failed. Please try again." });
+  }
 };
   return (
     <>
+      {/* Alert Notification */}
+      {alert && (
+        <div
+          className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-md border-2 font-semibold text-white animate-slide-down ${
+            alert.type === "success"
+              ? "bg-green-500/80 border-green-400 shadow-green-500/50"
+              : alert.type === "error"
+              ? "bg-red-500/80 border-red-400 shadow-red-500/50"
+              : "bg-yellow-500/80 border-yellow-400 shadow-yellow-500/50"
+          }`}
+        >
+          {alert.message}
+        </div>
+      )}
 
       <section className="relative min-h-screen flex items-center justify-center 
       bg-gradient-to-br from-[#fdfbfb] via-[#f3e7f3] to-[#e3d4f3] px-6 overflow-hidden">
@@ -102,6 +129,7 @@ function Register() {
                 type="email"
                 name="email"
                 value={formData.email}
+                onChange={handleChange}
                 placeholder=" "
                 className="peer w-full px-4 py-3 rounded-xl
                 bg-white/40 backdrop-blur-md
@@ -115,7 +143,6 @@ function Register() {
                 className="absolute left-4 top-3 text-sm text-[#3b2f63]/70
                 transition-all
                 peer-placeholder-shown:top-4
-                peer-placeholder-shown:top-3
                 peer-focus:-top-2
                 peer-focus:text-xs
                 peer-focus:text-[#3b2f63]
@@ -130,6 +157,7 @@ function Register() {
                 type="password"
                 name="password"
                 value={formData.password}
+                onChange={handleChange}
                 placeholder=" "
                 className="peer w-full px-4 py-3 rounded-xl
                 bg-white/40 backdrop-blur-md
@@ -143,7 +171,6 @@ function Register() {
                 className="absolute left-4 top-3 text-sm text-[#3b2f63]/70
                 transition-all
                 peer-placeholder-shown:top-4
-                peer-placeholder-shown:top-3
                 peer-focus:-top-2
                 peer-focus:text-xs
                 peer-focus:text-[#3b2f63]

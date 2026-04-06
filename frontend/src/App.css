@@ -2,3 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.4s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.4s ease-out;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Music player styles */
+@layer components {
+  .glass-panel {
+    @apply bg-white/20 backdrop-blur-xl border border-white/30 rounded-xl;
+  }
+
+  .glass-panel-strong {
+    @apply bg-white/30 backdrop-blur-xl border border-white/40 rounded-xl;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #d9a7c7 0%, #3b2f63 100%);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #d9a7c7 0%, #3b2f63 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(217, 167, 199, 0.4);
+  }
+
+  .shadow-glow-sm {
+    box-shadow: 0 0 15px rgba(217, 167, 199, 0.3);
+  }
+
+  .song-card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:scale-105;
+  }
+
+  .play-overlay {
+    @apply opacity-0 group-hover:opacity-100 transition-opacity duration-300;
+  }
+}
+}
+
