@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import MusicSidebar from "../components/MusicSideBar";
 import SongCard from "../components/SongCard";
-import { Play, Pause, SkipBack, SkipForward, Volume2, Music, FiMusic } from 'lucide-react';
-import Logo from '../assets/music.avif';
+import { Play, Pause, SkipBack, SkipForward, Volume2, Music } from 'lucide-react';
+import { FiMusic } from 'react-icons/fi';
 
 // Sample songs for demo
 const DEMO_SONGS = [
