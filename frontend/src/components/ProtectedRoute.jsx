@@ -6,10 +6,13 @@ export const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-[#fdfbfb] via-[#f3e7f3] to-[#e3d4f3]">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#3b2f63]/30 border-t-[#d9a7c7] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#3b2f63] font-semibold">Loading your music...</p>
+      <div className="flex items-center justify-center h-screen bg-[#0f172a]">
+        <div className="text-center space-y-6">
+          <div className="relative inline-block">
+            <div className="w-16 h-16 border-4 border-white/5 border-t-violet-500 rounded-full animate-spin"></div>
+            <div className="absolute inset-0 bg-violet-500/20 blur-xl rounded-full"></div>
+          </div>
+          <p className="text-white/60 font-bold tracking-widest uppercase text-xs animate-pulse">Loading your music...</p>
         </div>
       </div>
     );

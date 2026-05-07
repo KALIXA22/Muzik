@@ -2,25 +2,29 @@ import React from 'react'
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import About from '../components/About';
-import Library from '../components/Library';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
 
 function Home() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden
-      bg-gradient-to-br from-[#fdfbfb] via-[#f3e7f3] to-[#e3d4f3]">
-        
-         <Navbar />
+    <div className="relative min-h-screen overflow-x-hidden bg-[#0f172a]">
+      {/* Dynamic Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/20 blur-[120px] rounded-full animate-float"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-600/20 blur-[120px] rounded-full animate-float delay-300"></div>
+        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-cyan-600/10 blur-[100px] rounded-full animate-float delay-200"></div>
+      </div>
 
-       <main className="pt-20"> 
+      <Navbar />
+
+      <main className="relative z-10">
         <section id="home"><Hero /></section>
         <section id="about"><About /></section>
-        <section id="library"><Library /></section>
-       <section id="contact"><Contact /></section>
-       </main>
-       <Footer /> 
+        <section id="contact"><Contact /></section>
+      </main>
+
+      <Footer />
     </div>
   )
 }

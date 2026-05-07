@@ -1,51 +1,94 @@
-import React from "react";
-import { FiMail, FiUser, FiMessageCircle } from "react-icons/fi";
+import React from 'react';
+import { FiMail, FiMapPin, FiPhone, FiSend } from 'react-icons/fi';
 
 function Contact() {
   return (
-    <section id="contact" className="relative isolate py-24">
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <section id="contact" className="relative py-32 bg-[#0f172a] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        
+        <div className="grid lg:grid-cols-2 gap-20 items-start">
+          
+          {/* Info Side */}
+          <div className="space-y-12 animate-fade-up">
+            <div className="space-y-6">
+              <div className="inline-block px-4 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold tracking-widest uppercase">
+                Get In Touch
+              </div>
+              <h2 className="text-5xl font-bold text-white">Let's Talk <span className="gradient-text">Music.</span></h2>
+              <p className="text-white/50 text-lg max-w-md">
+                Have questions about our platform or want to partner with us? We're always open to new frequencies.
+              </p>
+            </div>
 
-        {/* Left Content */}
-        <div className="space-y-6">
-          <div className="inline-block px-5 py-2 rounded-full bg-white/30 backdrop-blur-md border border-white/30 text-sm">
-            Get In Touch
+            <div className="space-y-8">
+              {[
+                { icon: <FiMail />, label: 'Email', value: 'hello@musica.io' },
+                { icon: <FiPhone />, label: 'Phone', value: '+1 (555) 000-0000' },
+                { icon: <FiMapPin />, label: 'Studio', value: '123 Audio Ave, Sound City' },
+              ].map((item, index) => (
+                <div key={index} className="flex items-center gap-6 group">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-cyan-400 text-xl group-hover:bg-cyan-400 group-hover:text-slate-900 transition-all duration-300 shadow-lg shadow-cyan-500/0 group-hover:shadow-cyan-500/20">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <div className="text-white/40 text-xs font-bold uppercase tracking-widest mb-1">{item.label}</div>
+                    <div className="text-white text-lg font-bold">{item.value}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <h2 className="text-4xl font-bold text-[#3b2f63]">Let’s Connect 🎧</h2>
-          <p className="text-[#3b2f63]/80 text-lg max-w-md">
-            Have questions, feedback, or partnership ideas? We’d love to hear from you. Music connects us — let’s start a conversation.
-          </p>
-        </div>
+          {/* Form Side */}
+          <div className="relative animate-fade-up delay-200">
+            <div className="absolute -inset-4 bg-cyan-500/10 blur-[80px] rounded-full"></div>
+            <div className="relative p-10 rounded-[40px] bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl">
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-white/60 ml-2">Full Name</label>
+                    <input 
+                      type="text" 
+                      placeholder="John Doe" 
+                      className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-white/60 ml-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      placeholder="john@example.com" 
+                      className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/60 ml-2">Subject</label>
+                  <select className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all appearance-none">
+                    <option className="bg-slate-900">General Inquiry</option>
+                    <option className="bg-slate-900">Artist Partnership</option>
+                    <option className="bg-slate-900">Technical Support</option>
+                    <option className="bg-slate-900">Business Inquiry</option>
+                  </select>
+                </div>
 
-        {/* Right Form */}
-        <div className="relative">
-          <div className="absolute -inset-8 bg-[#d9a7c7]/20 blur-3xl rounded-full"></div>
-          <div className="relative bg-white/30 backdrop-blur-xl border border-white/30 rounded-3xl p-8 shadow-md space-y-5">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-white/60 ml-2">Your Message</label>
+                  <textarea 
+                    rows="4" 
+                    placeholder="Tell us what's on your mind..." 
+                    className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-cyan-400 focus:bg-white/10 transition-all resize-none"
+                  ></textarea>
+                </div>
 
-            {/* Name */}
-            <div className="space-y-2">
-              <label className="text-sm text-[#3b2f63] font-medium flex items-center gap-2"><FiUser size={14}/> Name</label>
-              <input type="text" placeholder="Your Name" className="w-full bg-transparent border-b border-gray-400 p-2 outline-none focus:border-[#3b2f63] transition" />
+                <button className="w-full py-5 rounded-2xl bg-gradient-to-r from-violet-600 via-pink-600 to-cyan-500 text-white font-bold text-lg shadow-xl shadow-violet-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                  Send Message <FiSend />
+                </button>
+              </form>
             </div>
-
-            {/* Email */}
-            <div className="space-y-2">
-              <label className="text-sm text-[#3b2f63] font-medium flex items-center gap-2"><FiMail size={14}/> Email</label>
-              <input type="email" placeholder="Your Email" className="w-full bg-transparent border-b border-gray-400 p-2 outline-none focus:border-[#3b2f63] transition" />
-            </div>
-
-            {/* Message */}
-            <div className="space-y-2">
-              <label className="text-sm text-[#3b2f63] font-medium flex items-center gap-2"><FiMessageCircle size={14}/> Message</label>
-              <textarea rows="4" placeholder="Your Message" className="w-full bg-transparent border-b border-gray-400 p-2 outline-none focus:border-[#3b2f63] transition resize-none"></textarea>
-            </div>
-
-            <button className="w-full py-3 rounded-3xl bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white font-semibold shadow-[0_0_20px_rgba(217,167,199,0.6)] hover:shadow-[0_0_40px_rgba(217,167,199,0.9)] transition">
-              Send Message 🎶
-            </button>
-
           </div>
+
         </div>
 
       </div>

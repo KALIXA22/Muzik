@@ -1,59 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiMusic } from 'react-icons/fi';
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50">
-      <div className="
-        flex items-center justify-between px-6 h-16 
-        rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30
-        shadow-[0_8px_32px_rgba(31,38,135,0.2)]
-        text-[#3b2f63]">
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'py-4' : 'py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6">
+        <div className={`
+          flex items-center justify-between px-8 h-16 
+          rounded-2xl border transition-all duration-300
+          ${scrolled
+            ? 'bg-[#0f172a]/80 backdrop-blur-xl border-white/10 shadow-2xl shadow-black/50'
+            : 'bg-white/5 backdrop-blur-md border-white/5'
+          }
+          text-white`}>
 
-        <Link to="/" className="text-xl font-bold tracking-wide">
-          Music🎧
-        </Link>
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-violet-500/20">
+              <FiMusic className="text-xl" />
+            </div>
+            <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70 group-hover:to-violet-400 transition-all">
+              Musica
+            </span>
+          </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {['Home', 'About', 'Library', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="
-              relative text-[#3b2f63]/80 hover:text-[#3b2f63] transition
-              after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0
-              after:bg-[#d9a7c7] hover:after:w-full after:transition-all
+          <nav className="hidden md:flex items-center gap-10">
+            {['Home', 'About', 'Library', 'Contact'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="
+                relative text-sm font-medium text-white/70 hover:text-white transition-colors
+                group
+              ">
+                {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-violet-500 to-pink-500 transition-all group-hover:w-full"></span>
+              </a>
+            ))}
+          </nav>
+
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/login" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+              Log In
+            </Link>
+            <Link to="/register" className="
+              px-6 py-2.5 rounded-xl text-sm font-semibold
+              bg-white text-slate-900 shadow-xl shadow-white/10
+              hover:bg-violet-500 hover:text-white hover:shadow-violet-500/30
+              transition-all active:scale-95
             ">
-              {item}
-            </a>
-          ))}
-        </nav>
-
-        <div className="hidden md:flex items-center gap-4">
-          <Link to="/login" className="px-4 py-2 rounded-3xl border border-white/40 hover:bg-white/30 transition">
-            Log In
-          </Link>
-          <Link to="/register" className="px-5 py-2 rounded-3xl bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white shadow-[0_0_20px_rgba(217,167,199,0.4)] hover:shadow-[0_0_30px_rgba(217,167,199,0.7)] transition">
-            Sign Up
-          </Link>
-        </div>
-
-        <button className="md:hidden" onClick={() => setOpen(!open)}>
-          {open ? <FiX size={24}/> : <FiMenu size={24}/>}
-        </button>
-      </div>
-
-      {open && (
-        <div className="mt-4 rounded-3xl bg-white/20 backdrop-blur-xl border border-white/30 shadow-xl p-6 space-y-6 text-[#3b2f63] md:hidden">
-          {['Home', 'About', 'Library', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="block">{item}</a>
-          ))}
-          <div className="pt-4 border-t border-white/30 space-y-3">
-            <Link to="/login" className="block text-center rounded-3xl py-2 border border-white/40">Log In</Link>
-            <Link to="/register" className="block text-center rounded-3xl py-2 bg-gradient-to-r from-[#d9a7c7] to-[#3b2f63] text-white">Sign Up</Link>
+              Get Started
+            </Link>
           </div>
+
+          <button className="md:hidden text-white/70 hover:text-white transition-colors" onClick={() => setOpen(!open)}>
+            {open ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
         </div>
-      )}
+
+        {/* Mobile Menu */}
+        <div className={`
+          absolute top-full left-6 right-6 mt-4 p-6
+          rounded-2xl bg-[#0f172a]/95 backdrop-blur-2xl border border-white/10
+          shadow-2xl md:hidden transition-all duration-300 transform
+          ${open ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}
+        `}>
+          <nav className="flex flex-col gap-6">
+            {['Home', 'About', 'Library', 'Contact'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setOpen(false)} className="text-lg font-medium text-white/70 hover:text-white transition-colors">{item}</a>
+            ))}
+            <div className="pt-6 border-t border-white/5 flex flex-col gap-4">
+              <Link to="/login" className="text-center py-3 text-white/70 font-medium">Log In</Link>
+              <Link to="/register" className="text-center py-3 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 text-white font-bold shadow-lg shadow-violet-600/20">Sign Up</Link>
+            </div>
+          </nav>
+        </div>
+      </div>
     </header>
   );
 }
