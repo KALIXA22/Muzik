@@ -49,7 +49,7 @@ function MusicDashboard() {
 
     if (isPlaying) {
       const playPromise = audio.play();
-      
+
       if (playPromise !== undefined) {
         playPromise.catch(error => {
           // Ignore AbortError caused by rapid song switching
@@ -244,7 +244,7 @@ function MusicDashboard() {
                     <h3 className="text-base font-bold text-white truncate italic uppercase tracking-wider">{currentSong.title}</h3>
                     <p className="text-xs text-white/40 font-medium truncate">{currentSong.artist}</p>
                     {currentSong.preview_url && (
-                       <span className="text-[7px] font-bold text-violet-400 uppercase tracking-widest bg-violet-400/10 px-1.5 py-0.5 rounded mt-1 inline-block">Digital Stream Active</span>
+                      <span className="text-[7px] font-bold text-violet-400 uppercase tracking-widest bg-violet-400/10 px-1.5 py-0.5 rounded mt-1 inline-block">Digital Stream Active</span>
                     )}
                   </div>
                 </>
@@ -292,7 +292,7 @@ function MusicDashboard() {
                 <span className="text-[9px] font-black text-white/20 w-10 text-right tabular-nums">
                   {audioRef.current ? Math.floor(audioRef.current.currentTime) : 0}s
                 </span>
-                <div 
+                <div
                   className="flex-1 h-1 bg-white/5 rounded-full relative overflow-hidden group cursor-pointer"
                   onClick={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
@@ -303,13 +303,13 @@ function MusicDashboard() {
                     }
                   }}
                 >
-                  <div 
+                  <div
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-500 via-pink-500 to-cyan-400 rounded-full transition-all duration-100"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
                 <span className="text-[9px] font-black text-white/20 w-10 tabular-nums">
-                   {audioRef.current ? Math.floor(audioRef.current.duration || 0) : 0}s
+                  {audioRef.current ? Math.floor(audioRef.current.duration || 0) : 0}s
                 </span>
               </div>
             </div>
@@ -318,18 +318,18 @@ function MusicDashboard() {
             <div className="hidden md:flex items-center justify-end gap-6 w-[30%]">
               <div className="flex items-center gap-3 group">
                 <Volume2 className="w-5 h-5 text-white/40 group-hover:text-violet-400 transition-colors" />
-                <input 
-                    type="range" 
-                    min="0" 
-                    max="1" 
-                    step="0.01" 
-                    value={volume} 
-                    onChange={(e) => {
-                        const val = parseFloat(e.target.value);
-                        setVolume(val);
-                        if (audioRef.current) audioRef.current.volume = val;
-                    }}
-                    className="w-24 h-1 bg-white/5 rounded-full appearance-none cursor-pointer accent-violet-500"
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    setVolume(val);
+                    if (audioRef.current) audioRef.current.volume = val;
+                  }}
+                  className="w-24 h-1 bg-white/5 rounded-full appearance-none cursor-pointer accent-violet-500"
                 />
               </div>
               <button className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/10 group">
