@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import MusicSidebar from '../components/MusicSideBar';
+import React, { useState, useEffect, useRef } from 'react'
+import MusicSidebar from '../components/MusicSidebar';
 import SongCard from '../components/SongCard';
 import { Play, Pause, SkipBack, SkipForward, Volume2, Music, Search, Bell, User, Loader2 } from 'lucide-react';
 import { FiMusic } from 'react-icons/fi';
@@ -12,11 +12,13 @@ function MusicDashboard() {
   const [songs, setSongs] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(70);
+  const [volume, setVolume] = useState(0.7);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef(null);
 
   // Fetch initial trending tracks (New Releases)
   useEffect(() => {
@@ -37,6 +39,33 @@ function MusicDashboard() {
 
     fetchTrending();
   }, []);
+
+  // Sync Audio Element
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error("Playback failed:", error);
+          setIsPlaying(false);
+        });
+      }
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying, currentSong]);
+
+  // Track Progress
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return;
+    const current = audioRef.current.currentTime;
+    const duration = audioRef.current.duration;
+    if (duration) {
+      setProgress((current / duration) * 100);
+    }
+  };
 
   const handleSearch = async (e) => {
     const query = e.target.value;
@@ -185,11 +214,10 @@ function MusicDashboard() {
 
             {/* Audio Element */}
             <audio
-              id="audio-player"
+              ref={audioRef}
               src={currentSong?.preview_url}
               onEnded={handleNextSong}
-              onPlay={() => setIsPlaying(true)}
-              onPause={() => setIsPlaying(false)}
+              onTimeUpdate={handleTimeUpdate}
             />
 
             {/* Song Info */}
@@ -235,14 +263,7 @@ function MusicDashboard() {
                 </button>
 
                 <button
-                  onClick={() => {
-                    const audio = document.getElementById('audio-player');
-                    if (isPlaying) {
-                      audio.pause();
-                    } else {
-                      audio.play();
-                    }
-                  }}
+                  onClick={() => setIsPlaying(!isPlaying)}
                   className="w-14 h-14 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all hover:bg-violet-500 hover:text-white"
                 >
                   {isPlaying ? (
@@ -260,16 +281,30 @@ function MusicDashboard() {
                 </button>
               </div>
 
-              {/* Progress Bar (Interactive) */}
+              {/* Progress Bar (Real-time) */}
               <div className="w-full flex items-center gap-3">
-                <span className="text-[10px] font-bold text-white/30 w-10 text-right">0:30</span>
-                <div className="flex-1 h-1.5 bg-white/5 rounded-full relative overflow-hidden group cursor-pointer">
+                <span className="text-[10px] font-bold text-white/30 w-10 text-right">
+                  {audioRef.current ? Math.floor(audioRef.current.currentTime) : 0}s
+                </span>
+                <div 
+                  className="flex-1 h-1.5 bg-white/5 rounded-full relative overflow-hidden group cursor-pointer"
+                  onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const pct = x / rect.width;
+                    if (audioRef.current) {
+                      audioRef.current.currentTime = pct * audioRef.current.duration;
+                    }
+                  }}
+                >
                   <div 
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-500 to-pink-500 rounded-full transition-all"
-                    style={{ width: isPlaying ? '100%' : '0%', transitionDuration: isPlaying ? '30s' : '0s', transitionTimingFunction: 'linear' }}
+                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-500 to-pink-500 rounded-full transition-all duration-100"
+                    style={{ width: `${progress}%` }}
                   ></div>
                 </div>
-                <span className="text-[10px] font-bold text-white/30 w-10">0:30</span>
+                <span className="text-[10px] font-bold text-white/30 w-10">
+                   {audioRef.current ? Math.floor(audioRef.current.duration || 0) : 0}s
+                </span>
               </div>
             </div>
 
@@ -286,7 +321,7 @@ function MusicDashboard() {
                     onChange={(e) => {
                         const val = parseFloat(e.target.value);
                         setVolume(val);
-                        document.getElementById('audio-player').volume = val;
+                        if (audioRef.current) audioRef.current.volume = val;
                     }}
                     className="w-24 h-1.5 bg-white/5 rounded-full appearance-none cursor-pointer accent-violet-500"
                 />

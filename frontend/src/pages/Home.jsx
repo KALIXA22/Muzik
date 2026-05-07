@@ -8,7 +8,6 @@ function Home() {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    // Check if splash has already been shown in this session
     const hasShownSplash = sessionStorage.getItem('hasShownSplash');
     if (hasShownSplash) {
       setShowSplash(false);

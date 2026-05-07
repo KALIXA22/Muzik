@@ -1,65 +1,30 @@
 const axios = require('axios');
-const dotenv = require('dotenv');
 
-dotenv.config();
-
-let accessToken = '';
-let tokenExpirationTime = 0;
-
-const getAccessToken = async () => {
-  const currentTime = Date.now();
-  if (accessToken && currentTime < tokenExpirationTime) {
-    return accessToken;
-  }
-
-  const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
-  if (!clientId || !clientSecret) {
-    throw new Error('Spotify Client ID or Client Secret is missing in .env');
-  }
-
-  const params = new URLSearchParams();
-  params.append('grant_type', 'client_credentials');
-
-  const response = await axios.post('https://accounts.spotify.com/api/token', params, {
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64'),
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  });
-
-  accessToken = response.data.access_token;
-  tokenExpirationTime = Date.now() + response.data.expires_in * 1000;
-  return accessToken;
-};
+/**
+ * Controller using iTunes Search API as a robust, free alternative to Spotify.
+ * This provides real-time music data and 30-second previews without requiring a Premium subscription.
+ */
 
 const getNewReleases = async (req, res) => {
   try {
-    const token = await getAccessToken();
-    const response = await axios.get('https://api.spotify.com/v1/browse/new-releases?limit=12', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    // Fetching Top Charts (equivalent to New Releases)
+    const response = await axios.get('https://itunes.apple.com/search?term=music&limit=20&media=music&sort=recent');
 
-    const tracks = response.data.albums.items.map(album => ({
-      id: album.id,
-      title: album.name,
-      artist: album.artists.map(a => a.name).join(', '),
-      album: album.name,
-      cover: album.images[0].url,
-      release_date: album.release_date,
-      type: 'album'
+    const tracks = response.data.results.map(item => ({
+      id: item.trackId.toString(),
+      title: item.trackName,
+      artist: item.artistName,
+      album: item.collectionName,
+      cover: item.artworkUrl100.replace('100x100', '600x600'), // High quality cover
+      preview_url: item.previewUrl,
+      duration: Math.floor(item.trackTimeMillis / 1000),
+      type: 'track'
     }));
 
     res.json(tracks);
   } catch (error) {
-    if (error.response) {
-      console.error('Spotify API Error Response:', error.response.data);
-      console.error('Spotify API Error Status:', error.response.status);
-    } else {
-      console.error('Spotify API Error:', error.message);
-    }
-    res.status(500).json({ error: 'Failed to fetch from Spotify' });
+    console.error('API Error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch music data' });
   }
 };
 
@@ -68,30 +33,23 @@ const searchTracks = async (req, res) => {
   if (!q) return res.status(400).json({ error: 'Query parameter q is required' });
 
   try {
-    const token = await getAccessToken();
-    const response = await axios.get(`https://api.spotify.com/v1/search?q=${encodeURIComponent(q)}&type=track&limit=12`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const response = await axios.get(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&limit=20&media=music`);
 
-    const tracks = response.data.tracks.items.map(track => ({
-      id: track.id,
-      title: track.name,
-      artist: track.artists.map(a => a.name).join(', '),
-      album: track.album.name,
-      cover: track.album.images[0].url,
-      preview_url: track.preview_url,
-      duration: Math.floor(track.duration_ms / 1000), // in seconds
+    const tracks = response.data.results.map(item => ({
+      id: item.trackId.toString(),
+      title: item.trackName,
+      artist: item.artistName,
+      album: item.collectionName,
+      cover: item.artworkUrl100.replace('100x100', '600x600'),
+      preview_url: item.previewUrl,
+      duration: Math.floor(item.trackTimeMillis / 1000),
       type: 'track'
     }));
 
     res.json(tracks);
   } catch (error) {
-    if (error.response) {
-      console.error('Spotify Search Error Response:', error.response.data);
-    } else {
-      console.error('Spotify Search Error:', error.message);
-    }
-    res.status(500).json({ error: 'Failed to search Spotify' });
+    console.error('Search API Error:', error.message);
+    res.status(500).json({ error: 'Failed to search music' });
   }
 };
 
