@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../api';
 
 const AuthContext = createContext();
 
@@ -17,30 +18,48 @@ export const AuthProvider = ({ children }) => {
   // Check if user is logged in on mount
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user');
-    if (storedUser) {
+    const token = sessionStorage.getItem('authToken');
+    if (storedUser && token) {
       setUser(JSON.parse(storedUser));
     }
     setLoading(false);
   }, []);
 
-  const register = (userData) => {
-    // Store user data temporarily
-    sessionStorage.setItem('user', JSON.stringify(userData));
-    return true;
+  const register = async (userData) => {
+    try {
+      const data = await authAPI.register(userData);
+      // Depending on backend implementation, we might auto-login or just redirect to login
+      return { success: true, message: data.message || "Account created successfully!" };
+    } catch (error) {
+      return { success: false, message: error.message || "Registration failed." };
+    }
   };
 
-  const login = (email, password) => {
-    // Simple demo validation - replace with backend API later
-    // For now, accept any email/password combination
-    const user = { email, id: Math.random().toString(36).substr(2, 9) };
-    setUser(user);
-    sessionStorage.setItem('user', JSON.stringify(user));
-    return { success: true, message: 'Login successful!' };
+  const login = async (email, password) => {
+    try {
+      const data = await authAPI.login(email, password);
+      
+      // Store user and token
+      const userData = data.user || { email };
+      setUser(userData);
+      sessionStorage.setItem('user', JSON.stringify(userData));
+      
+      if (data.token) {
+        sessionStorage.setItem('authToken', data.token);
+      } else if (data.accessToken) {
+        sessionStorage.setItem('authToken', data.accessToken);
+      }
+
+      return { success: true, message: 'Login successful!' };
+    } catch (error) {
+      return { success: false, message: error.message || 'Login failed.' };
+    }
   };
 
   const logout = () => {
     setUser(null);
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('authToken');
   };
 
   const value = {

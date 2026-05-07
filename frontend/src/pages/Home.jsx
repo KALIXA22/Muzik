@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import About from '../components/About';
-import Contact from '../components/Contact';
-import Footer from '../components/Footer';
+import Splash from '../components/Splash';
+
 
 
 function Home() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    // Check if splash has already been shown in this session
+    const hasShownSplash = sessionStorage.getItem('hasShownSplash');
+    if (hasShownSplash) {
+      setShowSplash(false);
+    }
+  }, []);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+    sessionStorage.setItem('hasShownSplash', 'true');
+  };
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#0f172a]">
+      {showSplash && <Splash onFinish={handleSplashFinish} />}
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/20 blur-[120px] rounded-full animate-float"></div>
@@ -18,13 +32,6 @@ function Home() {
 
       <Navbar />
 
-      <main className="relative z-10">
-        <section id="home"><Hero /></section>
-        <section id="about"><About /></section>
-        <section id="contact"><Contact /></section>
-      </main>
-
-      <Footer />
     </div>
   )
 }

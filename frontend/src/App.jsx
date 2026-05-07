@@ -11,17 +11,17 @@ function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<Home/>} />
-         <Route path="/register" element={<Register/>} />
-         <Route path="/login" element={<Login/>} />
-         <Route 
-           path="/dashboard" 
-           element={
-             <ProtectedRoute>
-               <MusicDashboard />
-             </ProtectedRoute>
-           } 
-         /> 
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <MusicDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </AuthProvider>
   );

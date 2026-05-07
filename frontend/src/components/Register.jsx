@@ -1,187 +1,141 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiMusic, FiUser, FiMail, FiLock, FiArrowRight } from "react-icons/fi";
-import { useAuth } from "../context/AuthContext";
+import { FiMusic, FiMail, FiLock, FiUser, FiArrowRight } from "react-icons/fi";
+import { authAPI } from "../api";
+import musicBg from '../assets/music.jpg';
 
 function Register() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  });
-
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const navigate = useNavigate();
-  const { register } = useAuth();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      setAlert({ type: "warning", message: "Please fill in all fields" });
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setAlert({ type: "error", message: "Passwords do not match" });
-      return;
-    }
+    setLoading(true);
+    setAlert(null);
 
     try {
-      register({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password
-      });
-
-      setAlert({ type: "success", message: "Account created successfully! Redirecting..." });
-
-      setTimeout(() => {
-        setAlert(null);
-        navigate("/login");
-      }, 2000);
-    } catch (error) {
-      setAlert({ type: "error", message: "Registration failed. Please try again." });
+      await authAPI.register(formData);
+      setAlert({ type: "success", message: "Account created successfully." });
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      setAlert({ type: "error", message: err.message || "Registration failed." });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-[#0f172a] px-6 overflow-hidden font-['Outfit']">
+    <div className="relative min-h-screen flex items-center justify-center bg-[#060a16] px-6 overflow-hidden font-['Outfit']">
       
-      {/* Dynamic Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/20 blur-[120px] rounded-full animate-float"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-600/20 blur-[120px] rounded-full animate-float delay-300"></div>
+      {/* Background with deep cinematic overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src={musicBg}
+          alt="Music Vibe"
+          className="w-full h-full object-cover opacity-30"
+          style={{ filter: 'blur(20px) saturate(1.2)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#060a16] via-[#060a16]/80 to-transparent"></div>
       </div>
 
-      {/* Alert Notification */}
-      {alert && (
-        <div
-          className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-md border border-white/10 font-bold text-white animate-fade-down ${
-            alert.type === "success"
-              ? "bg-violet-500/80 shadow-violet-500/20"
-              : alert.type === "error"
-              ? "bg-red-500/80 shadow-red-500/20"
-              : "bg-yellow-500/80 shadow-yellow-500/20"
-          }`}
-        >
-          {alert.message}
-        </div>
-      )}
-
-      <div className="relative z-10 w-full max-w-md animate-scale-in py-12">
-        <div className="p-10 rounded-[40px] bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl">
-          
-          <div className="text-center space-y-4 mb-10">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-violet-500 to-pink-500 shadow-lg shadow-violet-500/20 mb-2">
-              <FiMusic className="text-3xl text-white animate-pulse" />
-            </div>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
-              Create Account
-            </h2>
-            <p className="text-white/40 text-sm font-medium">
-              Join our community of music lovers today.
-            </p>
-          </div>
-
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-white/60 ml-2 uppercase tracking-widest">Full Name</label>
-              <div className="relative group">
-                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-violet-400 transition-colors" />
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/10 transition-all font-medium"
-                  required
-                />
+      <div className="relative z-10 w-full max-w-[440px] animate-fade-up">
+        
+        {/* Main Card */}
+        <div className="relative p-1 bg-gradient-to-b from-white/10 to-transparent rounded-[48px]">
+          <div className="relative p-10 md:p-14 rounded-[44px] bg-[#0c1222]/90 backdrop-blur-3xl shadow-2xl overflow-hidden border border-white/5">
+            
+            {/* Header */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-8">
+                 <FiMusic className="text-3xl text-pink-500" />
               </div>
+              <h2 className="text-4xl font-extrabold text-white tracking-tight mb-2 italic">Join Us</h2>
+              <p className="text-white/30 text-xs font-medium tracking-widest uppercase">Start your musical journey</p>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-white/60 ml-2 uppercase tracking-widest">Email Address</label>
-              <div className="relative group">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-violet-400 transition-colors" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="name@example.com"
-                  className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/10 transition-all font-medium"
-                  required
-                />
+            <form onSubmit={handleRegister} className="space-y-8">
+              <div className="space-y-6">
+                {/* Name Input */}
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
+                    <FiUser className="text-white/20 group-focus-within:text-pink-500 transition-colors" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Full Name"
+                    className="block w-full pl-10 pr-4 py-4 bg-transparent border-b border-white/10 text-white font-medium placeholder:text-white/10 focus:outline-none focus:border-pink-500 transition-all text-sm tracking-wide"
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
+                  <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-pink-500 to-violet-500 group-focus-within:w-full transition-all duration-500"></div>
+                </div>
+
+                {/* Email Input */}
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
+                    <FiMail className="text-white/20 group-focus-within:text-violet-500 transition-colors" />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    placeholder="Email Address"
+                    className="block w-full pl-10 pr-4 py-4 bg-transparent border-b border-white/10 text-white font-medium placeholder:text-white/10 focus:outline-none focus:border-violet-500 transition-all text-sm tracking-wide"
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                  <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-violet-500 to-pink-500 group-focus-within:w-full transition-all duration-500"></div>
+                </div>
+
+                {/* Password Input */}
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-1 flex items-center pointer-events-none">
+                    <FiLock className="text-white/20 group-focus-within:text-pink-500 transition-colors" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    placeholder="Password"
+                    className="block w-full pl-10 pr-4 py-4 bg-transparent border-b border-white/10 text-white font-medium placeholder:text-white/10 focus:outline-none focus:border-pink-500 transition-all text-sm tracking-wide"
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  />
+                  <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-pink-500 to-violet-500 group-focus-within:w-full transition-all duration-500"></div>
+                </div>
               </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="relative w-full py-5 rounded-2xl bg-white text-slate-900 font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-xl disabled:opacity-50 overflow-hidden group/btn"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-violet-500/10 opacity-0 group-hover/btn:opacity-100 transition-opacity"></div>
+                <span className="relative flex items-center justify-center gap-3">
+                  {loading ? "Creating..." : "Sign Up"}
+                  {!loading && <FiArrowRight className="group-hover/btn:translate-x-1 transition-transform" />}
+                </span>
+              </button>
+            </form>
+
+            <div className="mt-12 text-center">
+              <p className="text-white/20 text-xs font-medium">
+                Already have an account?{" "}
+                <Link to="/login" className="text-pink-400 hover:text-pink-300 transition-colors font-bold">
+                  Login here
+                </Link>
+              </p>
             </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-white/60 ml-2 uppercase tracking-widest">Password</label>
-              <div className="relative group">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-violet-400 transition-colors" />
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/10 transition-all font-medium"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-white/60 ml-2 uppercase tracking-widest">Confirm Password</label>
-              <div className="relative group">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-violet-400 transition-colors" />
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/10 transition-all font-medium"
-                  required
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-5 rounded-2xl mt-4 bg-white text-slate-900 font-bold text-lg shadow-xl shadow-white/5 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
-            >
-              Sign Up <FiArrowRight />
-            </button>
-          </form>
-
-          <div className="mt-10 pt-8 border-t border-white/5 text-center">
-            <p className="text-white/40 text-sm font-medium">
-              Already have an account?{" "}
-              <Link to="/login" className="text-white font-bold hover:text-violet-400 transition-colors">
-                Log in
-              </Link>
-            </p>
           </div>
         </div>
 
-        {/* Back to Home */}
-        <div className="mt-8 text-center pb-8">
-          <Link to="/" className="text-white/30 hover:text-white transition-colors text-sm font-bold flex items-center justify-center gap-2">
-             Back to Home
-          </Link>
-        </div>
+        {/* Status Alerts */}
+        {alert && (
+          <div className={`mt-8 p-4 rounded-2xl border text-center animate-fade-up ${
+            alert.type === 'success' ? 'bg-pink-500/10 border-pink-500/20 text-pink-400' : 'bg-red-500/10 border-red-500/20 text-red-400'
+          }`}>
+            <span className="text-xs font-bold uppercase tracking-widest italic">{alert.message}</span>
+          </div>
+        )}
+
       </div>
     </div>
   );

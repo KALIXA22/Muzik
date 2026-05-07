@@ -1,40 +1,46 @@
 // API Configuration for Backend Integration
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export const API_ENDPOINTS = {
   // AUTH ENDPOINTS
   AUTH: {
-    REGISTER: `${API_BASE_URL}/auth/register`,
-    LOGIN: `${API_BASE_URL}/auth/login`,
-    LOGOUT: `${API_BASE_URL}/auth/logout`,
-    REFRESH: `${API_BASE_URL}/auth/refresh`,
+    REGISTER: `${API_BASE_URL}/api/auth/register`,
+    LOGIN: `${API_BASE_URL}/api/auth/login`,
+    LOGOUT: `${API_BASE_URL}/api/auth/logout`,
+    REFRESH: `${API_BASE_URL}/api/auth/refresh`,
   },
   
-  // SONG ENDPOINTS
+  // SONG ENDPOINTS (Legacy/Cleaned)
   SONGS: {
-    GET_ALL: `${API_BASE_URL}/songs`,
-    GET_BY_ID: (id) => `${API_BASE_URL}/songs/${id}`,
-    CREATE: `${API_BASE_URL}/songs`,
-    UPDATE: (id) => `${API_BASE_URL}/songs/${id}`,
-    DELETE: (id) => `${API_BASE_URL}/songs/${id}`,
-    UPLOAD: `${API_BASE_URL}/songs/upload`,
+    GET_ALL: `${API_BASE_URL}/api/songs`,
+    GET_BY_ID: (id) => `${API_BASE_URL}/api/songs/${id}`,
+    CREATE: `${API_BASE_URL}/api/songs`,
+    UPDATE: (id) => `${API_BASE_URL}/api/songs/${id}`,
+    DELETE: (id) => `${API_BASE_URL}/api/songs/${id}`,
+    UPLOAD: `${API_BASE_URL}/api/songs/upload`,
+  },
+
+  // SPOTIFY ENDPOINTS
+  SPOTIFY: {
+    GET_NEW_RELEASES: `${API_BASE_URL}/api/spotify/new-releases`,
+    SEARCH: (query) => `${API_BASE_URL}/api/spotify/search?q=${encodeURIComponent(query)}`,
   },
 
   // USER ENDPOINTS
   USER: {
-    GET_PROFILE: `${API_BASE_URL}/user/profile`,
-    UPDATE_PROFILE: `${API_BASE_URL}/user/profile`,
-    GET_LIBRARY: `${API_BASE_URL}/user/library`,
+    GET_PROFILE: `${API_BASE_URL}/api/user/profile`,
+    UPDATE_PROFILE: `${API_BASE_URL}/api/user/profile`,
+    GET_LIBRARY: `${API_BASE_URL}/api/user/library`,
   },
 
   // PLAYLIST ENDPOINTS
   PLAYLISTS: {
-    GET_ALL: `${API_BASE_URL}/playlists`,
-    CREATE: `${API_BASE_URL}/playlists`,
-    GET_BY_ID: (id) => `${API_BASE_URL}/playlists/${id}`,
-    UPDATE: (id) => `${API_BASE_URL}/playlists/${id}`,
-    DELETE: (id) => `${API_BASE_URL}/playlists/${id}`,
+    GET_ALL: `${API_BASE_URL}/api/playlists`,
+    CREATE: `${API_BASE_URL}/api/playlists`,
+    GET_BY_ID: (id) => `${API_BASE_URL}/api/playlists/${id}`,
+    UPDATE: (id) => `${API_BASE_URL}/api/playlists/${id}`,
+    DELETE: (id) => `${API_BASE_URL}/api/playlists/${id}`,
   },
 };
 

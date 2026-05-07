@@ -3,15 +3,15 @@ const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 
 const register=async(req,res)=>{
-    const {username,email,password}=req.body;
+    const {name,email,password}=req.body;
     const hashedPassword=await bcrypt.hash(password,10);
 
-    await User.create({
-        username,
+    const user = await User.create({
+        username: name,
         email,
         password:hashedPassword
     });
-    res.status(201).json({message:"User registered successfully"});
+    res.status(201).json({message:"User registered successfully", user: { id: user._id, name: user.username, email: user.email }});
 }
 
 const login=async(req,res)=>{
@@ -25,11 +25,11 @@ const login=async(req,res)=>{
 
     const token=jwt.sign(
         {id:user._id},
-        process.env.JWT_SECRET,
+        process.env.SECRET_KEY,
         {expiresIn:"7d"}
     );
 
-    res.json({token});
+    res.json({token, user: { id: user._id, name: user.username, email: user.email }});
 };
 
 module.exports={

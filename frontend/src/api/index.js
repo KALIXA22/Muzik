@@ -115,6 +115,15 @@ export const userAPI = {
     fetchAPI(API_ENDPOINTS.USER.GET_LIBRARY),
 };
 
+// Spotify API Calls
+export const spotifyAPI = {
+  getNewReleases: () =>
+    fetchAPI(API_ENDPOINTS.SPOTIFY.GET_NEW_RELEASES),
+
+  search: (query) =>
+    fetchAPI(API_ENDPOINTS.SPOTIFY.SEARCH(query)),
+};
+
 // Playlist API Calls
 export const playlistAPI = {
   getAll: () =>
@@ -141,4 +150,4 @@ export const playlistAPI = {
     }),
 };
 
-export default { authAPI, songAPI, userAPI, playlistAPI };
+export default { authAPI, songAPI, userAPI, playlistAPI, spotifyAPI };
