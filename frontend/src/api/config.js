@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
     LOGOUT: `${API_BASE_URL}/api/auth/logout`,
     REFRESH: `${API_BASE_URL}/api/auth/refresh`,
   },
-  
+
   // SONG ENDPOINTS (Legacy/Cleaned)
   SONGS: {
     GET_ALL: `${API_BASE_URL}/api/songs`,
@@ -47,7 +47,7 @@ export const API_ENDPOINTS = {
 // API Helper Functions
 export const apiCall = async (url, options = {}) => {
   const token = sessionStorage.getItem('authToken');
-  
+
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -70,7 +70,7 @@ export const apiCall = async (url, options = {}) => {
     }
 
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data.message || 'API Error');
     }

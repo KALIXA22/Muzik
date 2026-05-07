@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import MusicSidebar from '../components/MusicSidebar';
+import MusicSidebar from '../components/MusicSideBar';
 import SongCard from '../components/SongCard';
 import { Play, Pause, SkipBack, SkipForward, Volume2, Music, Search, Bell, User, Loader2 } from 'lucide-react';
 import { FiMusic } from 'react-icons/fi';
@@ -20,18 +20,19 @@ function MusicDashboard() {
   const [progress, setProgress] = useState(0);
   const audioRef = useRef(null);
 
-  // Fetch initial trending tracks (New Releases)
+  // Fetch initial trending tracks (Now using the iTunes fallback API in backend)
   useEffect(() => {
     const fetchTrending = async () => {
       try {
         setLoading(true);
         const data = await spotifyAPI.getNewReleases();
         setSongs(data);
-        if (data.length > 0) {
+        if (data.length > 0 && !currentSong) {
           setCurrentSong(data[0]);
+          setCurrentIndex(0);
         }
       } catch (error) {
-        console.error("Failed to fetch new releases:", error);
+        console.error("Failed to fetch tracks:", error);
       } finally {
         setLoading(false);
       }
@@ -40,20 +41,28 @@ function MusicDashboard() {
     fetchTrending();
   }, []);
 
-  // Sync Audio Element
+  // Sync Audio Element and handle play promises safely
   useEffect(() => {
-    if (!audioRef.current) return;
+    if (!audioRef.current || !currentSong) return;
+
+    const audio = audioRef.current;
 
     if (isPlaying) {
-      const playPromise = audioRef.current.play();
+      const playPromise = audio.play();
+      
       if (playPromise !== undefined) {
         playPromise.catch(error => {
-          console.error("Playback failed:", error);
-          setIsPlaying(false);
+          // Ignore AbortError caused by rapid song switching
+          if (error.name === 'AbortError') {
+            // silent ignore
+          } else {
+            console.error("Playback failed:", error);
+            setIsPlaying(false);
+          }
         });
       }
     } else {
-      audioRef.current.pause();
+      audio.pause();
     }
   }, [isPlaying, currentSong]);
 
@@ -82,7 +91,6 @@ function MusicDashboard() {
         setIsSearching(false);
       }
     } else if (query.length === 0) {
-      // Reset to trending if search is cleared
       const data = await spotifyAPI.getNewReleases();
       setSongs(data);
     }
@@ -146,7 +154,7 @@ function MusicDashboard() {
             <div className="flex items-center gap-4 pl-6 border-l border-white/10">
               <div className="text-right hidden sm:block">
                 <div className="text-sm font-bold text-white">{user?.name || 'Musica User'}</div>
-                <div className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Premium Plan</div>
+                <div className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Premium User</div>
               </div>
               <button className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-500 to-pink-500 flex items-center justify-center border border-white/20 shadow-xl shadow-violet-500/20">
                 <User className="w-6 h-6 text-white" />
@@ -171,17 +179,17 @@ function MusicDashboard() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-[#0f172a]/40"></div>
             <div className="absolute bottom-10 left-10 space-y-4 animate-fade-up">
               <div className="inline-block px-4 py-1 rounded-full bg-violet-500 text-[10px] font-bold uppercase tracking-widest">Featured Artist</div>
-              <h2 className="text-6xl font-extrabold tracking-tighter">Urban Nights <br /><span className="gradient-text">City Lights</span></h2>
+              <h2 className="text-6xl font-extrabold tracking-tighter uppercase italic leading-none">Sonic <br /><span className="gradient-text">Frontiers</span></h2>
               <div className="flex items-center gap-6 pt-4">
                 <button className="px-8 py-3.5 rounded-2xl bg-white text-slate-900 font-bold hover:scale-105 transition-transform shadow-xl">Listen Now</button>
-                <button className="px-8 py-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 font-bold text-white hover:bg-white/20 transition-all">Add to Library</button>
+                <button className="px-8 py-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 font-bold text-white hover:bg-white/20 transition-all uppercase tracking-widest text-[10px]">Add to Library</button>
               </div>
             </div>
           </div>
 
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-2xl font-bold">{searchQuery ? `Results for "${searchQuery}"` : "New Releases"}</h3>
-            {!searchQuery && <button className="text-sm font-bold text-violet-400 hover:text-violet-300 transition-colors">See all</button>}
+            <h3 className="text-2xl font-bold uppercase italic tracking-wider">{searchQuery ? `Results: ${searchQuery}` : "Trending Now"}</h3>
+            {!searchQuery && <button className="text-[10px] font-bold text-white/30 hover:text-white uppercase tracking-widest transition-all">View All</button>}
           </div>
 
           {/* Loading State */}
@@ -233,12 +241,10 @@ function MusicDashboard() {
                     <div className="absolute inset-0 bg-violet-500/20 mix-blend-overlay rounded-2xl"></div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-bold text-white truncate">{currentSong.title}</h3>
+                    <h3 className="text-base font-bold text-white truncate italic uppercase tracking-wider">{currentSong.title}</h3>
                     <p className="text-xs text-white/40 font-medium truncate">{currentSong.artist}</p>
-                    {currentSong.preview_url ? (
-                       <span className="text-[8px] font-bold text-violet-400 uppercase tracking-widest bg-violet-400/10 px-1.5 py-0.5 rounded">Preview Available</span>
-                    ) : (
-                       <span className="text-[8px] font-bold text-red-400 uppercase tracking-widest bg-red-400/10 px-1.5 py-0.5 rounded">No Preview</span>
+                    {currentSong.preview_url && (
+                       <span className="text-[7px] font-bold text-violet-400 uppercase tracking-widest bg-violet-400/10 px-1.5 py-0.5 rounded mt-1 inline-block">Digital Stream Active</span>
                     )}
                   </div>
                 </>
@@ -247,14 +253,14 @@ function MusicDashboard() {
                   <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
                     <Music className="w-6 h-6 text-white/20" />
                   </div>
-                  <p className="text-white/40 text-sm font-bold uppercase tracking-widest">Select a Track</p>
+                  <p className="text-white/40 text-sm font-bold uppercase tracking-widest italic">Signal Offline</p>
                 </div>
               )}
             </div>
 
             {/* Controls */}
             <div className="flex-1 flex flex-col items-center gap-2 w-full">
-              <div className="flex items-center gap-8">
+              <div className="flex items-center gap-10">
                 <button
                   onClick={handlePrevSong}
                   className="text-white/40 hover:text-white transition-colors"
@@ -264,12 +270,12 @@ function MusicDashboard() {
 
                 <button
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-14 h-14 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all hover:bg-violet-500 hover:text-white"
+                  className="w-16 h-16 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all hover:bg-violet-500 hover:text-white"
                 >
                   {isPlaying ? (
-                    <Pause className="w-6 h-6" fill="currentColor" />
+                    <Pause className="w-7 h-7" fill="currentColor" />
                   ) : (
-                    <Play className="w-6 h-6 ml-1" fill="currentColor" />
+                    <Play className="w-7 h-7 ml-1" fill="currentColor" />
                   )}
                 </button>
 
@@ -282,12 +288,12 @@ function MusicDashboard() {
               </div>
 
               {/* Progress Bar (Real-time) */}
-              <div className="w-full flex items-center gap-3">
-                <span className="text-[10px] font-bold text-white/30 w-10 text-right">
+              <div className="w-full flex items-center gap-4">
+                <span className="text-[9px] font-black text-white/20 w-10 text-right tabular-nums">
                   {audioRef.current ? Math.floor(audioRef.current.currentTime) : 0}s
                 </span>
                 <div 
-                  className="flex-1 h-1.5 bg-white/5 rounded-full relative overflow-hidden group cursor-pointer"
+                  className="flex-1 h-1 bg-white/5 rounded-full relative overflow-hidden group cursor-pointer"
                   onClick={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const x = e.clientX - rect.left;
@@ -298,11 +304,11 @@ function MusicDashboard() {
                   }}
                 >
                   <div 
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-500 to-pink-500 rounded-full transition-all duration-100"
+                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-500 via-pink-500 to-cyan-400 rounded-full transition-all duration-100"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
-                <span className="text-[10px] font-bold text-white/30 w-10">
+                <span className="text-[9px] font-black text-white/20 w-10 tabular-nums">
                    {audioRef.current ? Math.floor(audioRef.current.duration || 0) : 0}s
                 </span>
               </div>
@@ -323,11 +329,11 @@ function MusicDashboard() {
                         setVolume(val);
                         if (audioRef.current) audioRef.current.volume = val;
                     }}
-                    className="w-24 h-1.5 bg-white/5 rounded-full appearance-none cursor-pointer accent-violet-500"
+                    className="w-24 h-1 bg-white/5 rounded-full appearance-none cursor-pointer accent-violet-500"
                 />
               </div>
-              <button className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/10">
-                <FiMusic className="text-white/70" />
+              <button className="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/10 group">
+                <FiMusic className="text-white/30 group-hover:text-white transition-colors" />
               </button>
             </div>
 
@@ -338,4 +344,4 @@ function MusicDashboard() {
   );
 }
 
-export default MusicDashboard
+export default MusicDashboard;
